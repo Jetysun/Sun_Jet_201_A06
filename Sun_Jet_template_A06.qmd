@@ -51,7 +51,7 @@ To get full credit for this Question you must:
 ::: {.callout-tip icon="false"}
 ## Screenshot/image of RStudio
 
-![](filepath.png)
+![](images/clipboard-247370688.png)
 :::
 
 ## Question 2 (8 points)
@@ -95,7 +95,10 @@ Extract the value `8162` (LeBron James points) in 2 different ways:
 
 ```{r}
 
+# Using indexing
 goat_points_indexing <- player_info[[2]][[4]]
+
+# Using names
 goat_points_names <- player_info[["LJ"]][["points"]]
 
 print(goat_points_indexing)
@@ -135,11 +138,13 @@ Note: this must still run correctly even if the values were to change or if anot
 
 ```{r}
 
+# ppg stands for Points Per Game. Initialize an empty list to contain ppg.
 ppg_list <- list()
+
+# For each player in player_info, divide that player's points by games played to find their ppg. Add ppg to ppg_list.
 for (player in names(player_info)) {
   ppg <- player_info[[player]]$points/player_info[[player]]$games_played
   ppg_list[[player]] <- ppg
-
 }
 
 print(ppg_list)
@@ -153,8 +158,12 @@ Store the output as a vector and print the results.
 
 ```{r}
 
+# Round each element in the list to two decimal places.
 ppg_list <- lapply(ppg_list, round, 2)
+
+# Unlist to make a vector.
 ppg_vec <- unlist(ppg_list)
+
 print(ppg_vec)
 ```
 
@@ -176,11 +185,13 @@ Hint: use `MARGIN = 1:2` to apply the function to each value instead of only a r
 
 ```{r}
 
-
+# Create a function new_round that takes in a number. It finds the number of digits in that number through nchar(abs(x)). Make the number of digits negative and add 1 to that number. Finally, round to that number.
+# For example, 91 has 2 digits. new_round(91) performs round(91, -1) which rounds 91 to the nearest tens.
 new_round <- function(x) {
-  round(x, (-(nchar(x)) + 1))
+  round(x, (-(nchar(abs(x))) + 1))
 }
 
+# Apply new_round to every element in mat_rand.
 apply(mat_rand, MARGIN = 1:2, new_round) 
 
 mat_rand
@@ -207,6 +218,7 @@ Calculate the average temperature for each month across the whole data frame (us
 
 ```{r}
 
+# Apply mean to by column to every column in max_temps that contains temperatures.
 average_temps <- apply(max_temps[3:14], 2, mean)
 print(average_temps)
 ```
@@ -223,6 +235,7 @@ No need to print any output here.
 
 ```{r}
 
+# Slice by row. Checks if the name in the state column in each row matches up with the listed state name. If it does, add that row to that state's dataframe. 
 Colorado <- max_temps[max_temps$state == "CO", ]
 Ohio <- max_temps[max_temps$state == "OH", ]
 Virginia <- max_temps[max_temps$state == "VA", ]
@@ -246,19 +259,25 @@ Note: This code should still run successfully even if the numbers were to change
 
 ```{r}
 
+# Apply median by row to all columns in Colorado which contain temperatures.
 CO_median_annual_temps <- apply(Colorado[2:14], 1, median)
-Colorado$median <- apply(Colorado[2:14], 1, median)
 
-CO_max_index <- which.max(CO_median_annual_temps)
-CO_min_index <- which.min(CO_median_annual_temps)
+# Add a column in the dataframe to double check.
+Colorado$median_annual_temps <- apply(Colorado[2:14], 1, median)
 
-CO_max_year <- which.max(CO_median_annual_temps) + 1894
-CO_min_year <- which.min(CO_median_annual_temps) + 1894
+# Abbreviating median annual temperatures as "mate." Find the index that corresponds to the maximum and minimum "mate"'s in CO_median_annual_temps.
+CO_max_mate_index <- which.max(CO_median_annual_temps)
+CO_min_mate_index <- which.min(CO_median_annual_temps)
 
-CO_max_temp <- CO_median_annual_temps[CO_max_index]
-CO_min_temp <- CO_median_annual_temps[CO_min_index]
+# Add 1894 to that index to get the year.
+CO_max_mate_year <- which.max(CO_median_annual_temps) + 1894
+CO_min_mate_year <- which.min(CO_median_annual_temps) + 1894
 
-print(paste0("The maximum median annual temperature of ", CO_max_temp,  " occurred in ", CO_max_year, " and the minimum median annual temperature of ", CO_min_temp, " occurred in ", CO_min_year, " ."))
+# Find the temperature value of the max and min mates.
+CO_max_mate_temp <- CO_median_annual_temps[CO_max_mate_index]
+CO_min_mate_temp <- CO_median_annual_temps[CO_min_mate_index]
+
+print(paste0("The maximum median annual temperature of ", CO_max_mate_temp,  " occurred in ", CO_max_mate_year, " and the minimum median annual temperature of ", CO_min_mate_temp, " occurred in ", CO_min_mate_year, " ."))
 ```
 
 ## Question 5 (5 points)
@@ -271,7 +290,7 @@ Run your function with 935068.
 
 ```{r}
 
-
+# Define function.
 sum_of_digits <- function(x, sum = 0) {
   
   # Base case
@@ -279,7 +298,10 @@ sum_of_digits <- function(x, sum = 0) {
   
   # Recursive Case
   
+  # Perform integer division on x by 10^(digits in x - 1) to obtain the first digit in x. For example, 312 would be integer divided by 10^2, yielding 3, the first digit of 312. Add this first digit to sum.
   sum <- sum + (x %/% (10 ^ (nchar(as.character(abs(x))) - 1)))
+  
+  # Use recursion. Input into sum_of_digits the remaining digits and the current sum. The remaining digits are calculated by x mod 10^(digits in x - 1). For example, 312 would become 312 mod 10^2. The remainder of 312/100 is 12, so 312 mod 10^2 = 12. 12 is the remaining digits in 312 after the 3 is taken away and added to the sum.
   sum_of_digits (x %% (10 ^ (nchar(as.character(abs(x))) - 1)), sum)
 }
 
