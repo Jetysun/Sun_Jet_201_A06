@@ -45,7 +45,7 @@ To get full credit for this Question you must:
 ::: {.callout-tip icon="false"}
 ## Github Repo Link
 
-<https://your-github-repo-url>
+<https://github.com/Jetysun/Sun_Jet_201_A06.git>
 :::
 
 ::: {.callout-tip icon="false"}
@@ -95,6 +95,11 @@ Extract the value `8162` (LeBron James points) in 2 different ways:
 
 ```{r}
 
+goat_points_indexing <- player_info[[2]][[4]]
+goat_points_names <- player_info[["LJ"]][["points"]]
+
+print(goat_points_indexing)
+print(goat_points_names)
 ```
 
 ### Part b (3 points)
@@ -105,6 +110,13 @@ Print the `player_info` list to prove you were successful.
 
 ```{r}
 
+player_info$MJ$height <- 78
+player_info$LJ$height <- 81
+player_info$KB$height <- 78
+player_info$KA$height <- 86
+player_info$SO$height <- 85
+
+print(player_info)
 ```
 
 ### Part c (3 points)
@@ -123,6 +135,14 @@ Note: this must still run correctly even if the values were to change or if anot
 
 ```{r}
 
+ppg_list <- list()
+for (player in names(player_info)) {
+  ppg <- player_info[[player]]$points/player_info[[player]]$games_played
+  ppg_list[[player]] <- ppg
+
+}
+
+print(ppg_list)
 ```
 
 ### Part d (1 point)
@@ -133,6 +153,9 @@ Store the output as a vector and print the results.
 
 ```{r}
 
+ppg_list <- lapply(ppg_list, round, 2)
+ppg_vec <- unlist(ppg_list)
+print(ppg_vec)
 ```
 
 ## Question 3 (3 points)
