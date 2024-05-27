@@ -176,6 +176,14 @@ Hint: use `MARGIN = 1:2` to apply the function to each value instead of only a r
 
 ```{r}
 
+
+new_round <- function(x) {
+  round(x, (-(nchar(x)) + 1))
+}
+
+apply(mat_rand, MARGIN = 1:2, new_round) 
+
+mat_rand
 ```
 
 ## Question 4 (9 points)
