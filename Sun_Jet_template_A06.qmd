@@ -271,4 +271,17 @@ Run your function with 935068.
 
 ```{r}
 
+
+sum_of_digits <- function(x, sum = 0) {
+  
+  # Base case
+  if (x == 0) return(sum)
+  
+  # Recursive Case
+  
+  sum <- sum + (x %/% (10 ^ (nchar(as.character(abs(x))) - 1)))
+  sum_of_digits (x %% (10 ^ (nchar(as.character(abs(x))) - 1)), sum)
+}
+
+sum_of_digits(935068)
 ```
